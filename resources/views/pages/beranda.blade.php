@@ -27,24 +27,26 @@
 
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
         @foreach($animes as $anime)
-        <div class="group">
-            <div class="relative overflow-hidden rounded-xl shadow-sm border border-gray-200 mb-3">
-                <img src="{{ $anime['images']['jpg']['large_image_url'] }}" 
-                     class="w-full aspect-[3/4] object-cover group-hover:opacity-80 transition"
-                     alt="{{ $anime['title'] }}">
-                
-                <div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded">
-                    ⭐ {{ $anime['score'] }}
-                </div>
+<a href="{{ route('anime.detail', $anime['mal_id']) }}" class="group block">
+    <div class="group">
+        <div class="relative overflow-hidden rounded-xl shadow-sm border border-gray-200 mb-3">
+            <img src="{{ $anime['images']['jpg']['large_image_url'] }}" 
+                 class="w-full aspect-[3/4] object-cover group-hover:opacity-80 transition"
+                 alt="{{ $anime['title'] }}">
+            
+            <div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded">
+                ⭐ {{ $anime['score'] }}
             </div>
-            
-            <h3 class="font-bold text-gray-800 text-sm truncate">{{ $anime['title'] }}</h3>
-            
-            <p class="text-xs text-blue-600 font-semibold">
-                {{ $anime['genres'][0]['name'] ?? 'Unknown' }}
-            </p>
         </div>
-        @endforeach
+        
+        <h3 class="font-bold text-gray-800 text-sm truncate group-hover:text-blue-600 transition">{{ $anime['title'] }}</h3>
+        
+        <p class="text-xs text-blue-600 font-semibold">
+            {{ $anime['genres'][0]['name'] ?? 'Unknown' }}
+        </p>
+    </div>
+</a>
+@endforeach
     </div>
 
 </div> @endsection

@@ -14,17 +14,19 @@
         
         <div class="flex overflow-x-auto gap-6 pb-6 scrollbar-hide">
             @foreach($data['animes'] as $anime)
-            <div class="min-w-[180px] md:min-w-[200px] group">
-                <div class="relative overflow-hidden rounded-2xl shadow-md mb-3">
-                    <img src="{{ $anime['images']['jpg']['large_image_url'] }}" 
-                         class="w-full aspect-[3/4] object-cover group-hover:scale-110 transition duration-500">
-                    <div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-lg shadow-lg">
-                        ⭐ {{ $anime['score'] ?? 'N/A' }}
-                    </div>
-                </div>
-                <h3 class="font-bold text-gray-800 text-sm truncate group-hover:text-blue-600 transition">{{ $anime['title'] }}</h3>
-            </div>
-            @endforeach
+<a href="{{ route('anime.detail', $anime['mal_id']) }}" class="min-w-[180px] md:min-w-[200px] group block">
+    <div class="relative overflow-hidden rounded-2xl shadow-md mb-3">
+        <img src="{{ $anime['images']['jpg']['large_image_url'] }}" 
+             class="w-full aspect-[3/4] object-cover group-hover:scale-110 transition duration-500">
+        <div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-lg shadow-lg">
+            ⭐ {{ $anime['score'] ?? '0' }}
+        </div>
+    </div>
+    <h3 class="font-bold text-gray-800 text-sm truncate group-hover:text-blue-600 transition">
+        {{ $anime['title'] }}
+    </h3>
+</a>
+@endforeach
         </div>
     </div>
     @endif

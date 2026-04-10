@@ -9,7 +9,7 @@
             <p class="text-gray-500 text-sm">Masukkan akun Anda untuk akses penuh.</p>
         </div>
 
-        <form action="#" method="POST">
+        <form action="/login" method="POST">
             @csrf
             <div class="mb-6">
                 <label for="email" class="block text-sm font-bold text-gray-700 mb-2 ml-1">Email atau Username</label>
