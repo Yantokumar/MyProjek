@@ -19,7 +19,7 @@
             <thead class="bg-gray-50 text-gray-400 text-xs uppercase tracking-widest">
                 <tr>
                     <th class="px-8 py-5">Tanggal</th>
-                    <th class="px-8 py-5">Isi Pesan</th>
+                    <th class="px-8 py-5">Nama Pengirim</th> <th class="px-8 py-5">Isi Pesan</th>
                     <th class="px-8 py-5 text-center">Aksi</th>
                 </tr>
             </thead>
@@ -30,6 +30,9 @@
                         <span class="text-sm font-medium text-gray-600">
                             {{ $p->created_at->format('d M Y') }}
                         </span>
+                    </td>
+                    <td class="px-8 py-5">
+                        <span class="font-bold text-gray-800">{{ $p->nama }}</span>
                     </td>
                     <td class="px-8 py-5">
                         <p class="text-sm text-gray-700 leading-relaxed max-w-lg">
@@ -43,14 +46,6 @@
                     </td>
                 </tr>
                 @empty
-                <tr>
-                    <td colspan="3" class="px-8 py-20 text-center">
-                        <div class="flex flex-col items-center">
-                            <span class="text-5xl mb-4">📩</span>
-                            <p class="text-gray-400 font-medium text-lg">Belum ada masukan dari user.</p>
-                        </div>
-                    </td>
-                </tr>
                 @endforelse
             </tbody>
         </table>

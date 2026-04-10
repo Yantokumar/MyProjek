@@ -50,18 +50,21 @@
         <h2 class="text-2xl font-extrabold text-gray-900 mb-2">Masukan untuk Web</h2>
         <p class="text-gray-500 mb-8">Punya ide fitur baru atau menemukan bug? Beritahu kami lewat formulir di bawah ini!</p>
 
-        <form action="#" method="POST">
-            @csrf
-            <div class="mb-6">
-                <label class="block text-sm font-bold text-gray-700 mb-3 ml-1">Pesan Anda:</label>
-                <textarea 
-                    rows="4" 
-                    class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition text-sm resize-none"
-                    placeholder="Tuliskan kritik, saran, atau masukan Anda di sini..."></textarea>
-            </div>
-            <button type="submit" class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-200 transition duration-300">
-                Kirim Masukan
-            </button>
+       <form action="{{ route('feedback.store') }}" method="POST" class="space-y-4">
+    @csrf <div>
+        <label class="block text-sm font-bold text-gray-700 mb-2">Nama</label>
+        <input type="text" name="nama" class="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-600" placeholder="Nama kamu..." required>
+    </div>
+    
+    <div>
+        <label class="block text-sm font-bold text-gray-700 mb-2">Pesan Masukan</label>
+        <textarea name="pesan" rows="4" class="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-600" placeholder="Ketik saran atau masukan di sini..." required></textarea>
+    </div>
+
+    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition">
+        Kirim Masukan
+    </button>
+</form>
         </form>
     </div>
 

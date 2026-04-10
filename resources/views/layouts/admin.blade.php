@@ -25,6 +25,9 @@
             <a href="/admin/feedback" class="flex items-center gap-3 py-3 px-4 rounded-xl transition {{ Request::is('admin/feedback') ? 'bg-blue-700 font-bold' : 'hover:bg-blue-800' }}">
                 <span>📩</span> Masukan User
             </a>
+            <a href="/admin/users" class="flex items-center gap-3 py-3 px-4 rounded-xl transition {{ Request::is('admin/users') ? 'bg-blue-700 font-bold' : 'hover:bg-blue-800' }}">
+                <span>👥</span> Manajemen User
+            </a>
             
             <div class="pt-10">
                 <hr class="border-blue-800 mb-6">

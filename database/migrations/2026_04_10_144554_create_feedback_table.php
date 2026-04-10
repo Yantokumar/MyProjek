@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('feedback', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');  // <--- Pastikan baris ini ADA
+            $table->text('pesan');  // <--- Pastikan baris ini ADA
             $table->timestamps();
         });
     }

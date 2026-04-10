@@ -23,6 +23,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/anime', [AdminController::class, 'anime'])->name('admin.anime');
     Route::get('/feedback', [AdminController::class, 'feedback'])->name('admin.feedback');
+    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
 });
 
 // --- HALAMAN DETAIL ANIME ---
@@ -41,3 +42,6 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Route masukan user
+Route::post('/feedback', [AdminController::class, 'storeFeedback'])->name('feedback.store');
