@@ -13,11 +13,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Admin Default
+        User::updateOrCreate(
+            ['email' => 'admin@animelib.com'],
+            [
+                'name' => 'Admin Bahrudin',
+                'password' => \Illuminate\Support\Facades\Hash::make('admin123'),
+                'role' => 'admin',
+            ]
+        );
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // User Regular Testing
+        User::updateOrCreate(
+            ['email' => 'user@animelib.com'],
+            [
+                'name' => 'Test User',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'role' => 'user',
+            ]
+        );
     }
 }

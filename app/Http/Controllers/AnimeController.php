@@ -3,65 +3,91 @@
 namespace App\Http\Controllers;
 
 use App\Models\Favorite;
+use App\Services\AnimeRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 
 class AnimeController extends Controller
 {
-    // --- MESIN UNTUK HALAMAN BERANDA ---
-    public function index()
+    protected AnimeRepository $animeRepo;
+
+    public function __construct(AnimeRepository $animeRepo)
     {
-        $response = Http::get('https://api.jikan.moe/v4/top/anime?filter=bypopularity&limit=12');
-        $animes = $response->json()['data'];
+        $this->animeRepo = $animeRepo;
+    }
+
+    // --- HALAMAN BERANDA DENGAN 1.000+ ANIME, TABS, DAN PAGINASI LENGKAP ---
+    public function index(Request $request)
+    {
+        $currentTab = $request->query('tab', 'all');
+        $searchQuery = $request->query('q');
+
+        // Paginasi 24 anime per halaman (total 42 halaman untuk 1.000 anime!)
+        $animes = $this->animeRepo->getPaginatedAnimes(24, $currentTab, $searchQuery);
+        $totalAnimeCount = $this->animeRepo->getTotalAnimeCount();
 
         return view('pages.beranda', [
             'animes' => $animes,
+            'currentTab' => $currentTab,
+            'searchQuery' => $searchQuery,
+            'totalAnimeCount' => $totalAnimeCount,
+            'isUsingMalKey' => $this->animeRepo->usesOfficialMalApi(),
         ]);
     }
 
-    // --- MESIN UNTUK HALAMAN GENRE (OTOMATIS) ---
+    // --- HALAMAN KOLEKSI GENRE ANIME ---
     public function genre()
     {
-        $genreListResponse = Http::get('https://api.jikan.moe/v4/genres/anime');
-        $genres = $genreListResponse->json()['data'];
+        $allGenreData = $this->animeRepo->getGenresWithAnimes();
 
-        $allGenreData = [];
-        // Kita batasi 10-15 saja agar tidak terlalu berat loadingnya
-        foreach (array_slice($genres, 0, 15) as $genre) {
-            $animeResponse = Http::get('https://api.jikan.moe/v4/anime?genres='.$genre['mal_id'].'&limit=8');
-            $allGenreData[] = [
-                'name' => $genre['name'],
-                'animes' => $animeResponse->json()['data'] ?? [],
-            ];
-        }
-
-        return view('pages.genre', compact('allGenreData'));
+        return view('pages.genre', [
+            'allGenreData' => $allGenreData,
+            'isUsingMalKey' => $this->animeRepo->usesOfficialMalApi(),
+        ]);
     }
 
+    // --- DETAIL ANIME ---
     public function show($id)
     {
-        // Ambil detail anime berdasarkan ID
-        $response = Http::get("https://api.jikan.moe/v4/anime/{$id}/full");
-        $anime = $response->json()['data'];
+        $anime = $this->animeRepo->getAnimeDetail($id);
 
-        return view('pages.detail', compact('anime'));
+        if (! $anime) {
+            abort(404, 'Detail anime tidak ditemukan atau sedang tidak dapat diakses.');
+        }
+
+        $isFavorited = false;
+        if (Auth::check()) {
+            $isFavorited = Favorite::where('user_id', Auth::id())
+                ->where('anime_mal_id', $id)
+                ->exists();
+        }
+
+        return view('pages.detail', compact('anime', 'isFavorited'));
     }
 
-    // Fungsi untuk menampilkan halaman favorit
+    // --- HALAMAN FAVORIT PENGGUNA ---
     public function favorites()
     {
-        // Ambil data favorit hanya milik user yang sedang login
-        $myFavorites = Favorite::where('user_id', Auth::id())->get();
+        $myFavorites = Favorite::where('user_id', Auth::id())->latest()->get();
 
         return view('pages.favorit', compact('myFavorites'));
     }
 
-    // Fungsi untuk menambah ke favorit
+    // --- MENAMBAH KE FAVORIT DENGAN PROTEKSI DUPLIKASI ---
     public function addFavorite(Request $request)
     {
-        if (! Auth::check()) {
-            return redirect()->route('login')->with('error', 'Silakan login dulu ya!');
+        $request->validate([
+            'mal_id' => 'required',
+            'judul' => 'required',
+            'gambar' => 'required',
+        ]);
+
+        $existing = Favorite::where('user_id', Auth::id())
+            ->where('anime_mal_id', $request->mal_id)
+            ->first();
+
+        if ($existing) {
+            return back()->with('error', 'Anime ini sudah ada dalam daftar favorit Anda!');
         }
 
         Favorite::create([
@@ -71,14 +97,12 @@ class AnimeController extends Controller
             'gambar' => $request->gambar,
         ]);
 
-        return back()->with('success', 'Berhasil ditambah ke favorit!');
+        return back()->with('success', 'Berhasil ditambahkan ke daftar favorit!');
     }
 
-    // Tambahkan ini di dalam class AnimeController
-
+    // --- MENGHAPUS DARI FAVORIT ---
     public function destroyFavorite($id)
     {
-        // Cari data favorit berdasarkan ID dan pastikan itu milik user yang sedang login
         $favorite = Favorite::where('id', $id)
             ->where('user_id', Auth::id())
             ->first();
@@ -89,6 +113,6 @@ class AnimeController extends Controller
             return back()->with('success', 'Anime berhasil dihapus dari favorit!');
         }
 
-        return back()->with('error', 'Data tidak ditemukan!');
+        return back()->with('error', 'Data favorit tidak ditemukan atau bukan milik Anda!');
     }
 }

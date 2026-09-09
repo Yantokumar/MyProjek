@@ -17,9 +17,19 @@ class AdminController extends Controller
         ]);
     }
 
-    public function anime()
+    public function anime(Request $request)
     {
-        return view('admin.anime_index', ['animes' => Anime::all()]);
+        $search = $request->query('q');
+        $query = Anime::query();
+
+        if (! empty($search)) {
+            $query->where('judul', 'LIKE', "%{$search}%")
+                  ->orWhere('genre', 'LIKE', "%{$search}%");
+        }
+
+        $animes = $query->orderBy('rating', 'desc')->paginate(25)->withQueryString();
+
+        return view('admin.anime_index', compact('animes', 'search'));
     }
 
     public function feedback()
@@ -50,5 +60,13 @@ class AdminController extends Controller
 
         // 3. Kembali ke halaman tentang dengan pesan sukses
         return back()->with('success', 'Terima kasih, masukan Anda sudah terkirim!');
+    }
+
+    public function destroyFeedback($id)
+    {
+        $feedback = Feedback::findOrFail($id);
+        $feedback->delete();
+
+        return back()->with('success', 'Pesan masukan berhasil dihapus!');
     }
 }
