@@ -55,6 +55,6 @@ class AnimeLibrary1kSeeder extends Seeder
             Anime::insert($records);
         }
 
-        $this->command?->info("Sukses mengimpor 1.000 anime ke tabel animes!");
+        $this->command?->info("Sukses mengimpor " . number_format(count($data)) . " anime ke tabel animes!");
     }
 }

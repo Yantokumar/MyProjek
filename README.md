@@ -17,7 +17,7 @@
 
 ## 📖 Tentang Projek
 
-**AnimeLib** adalah aplikasi web perpustakaan anime modern yang dibangun untuk memudahkan penggemar anime dalam mengeksplorasi, mencari, dan menyimpan koleksi anime favorit mereka. Aplikasi ini mengombinasikan kecepatan database lokal **SQLite** berkapasitas **1.000 judul anime pilihan** dengan fleksibilitas integrasi real-time dari **Jikan REST API** dan **Official MyAnimeList API**.
+**AnimeLib** adalah aplikasi web perpustakaan anime modern yang dibangun untuk memudahkan penggemar anime dalam mengeksplorasi, mencari, dan menyimpan koleksi anime favorit mereka. Aplikasi ini mengombinasikan kecepatan database lokal **SQLite** berkapasitas **3.000 judul anime pilihan** dengan fleksibilitas integrasi real-time dari **Jikan REST API** dan **Official MyAnimeList API**.
 
 Desain antarmuka dibuat secara khusus (*bespoke*) dengan tema biru-putih modern, aksen *glassmorphism*, ikon vektor custom (tanpa template emoji generik AI), serta *Interactive Spotlight Showcase* ala platform streaming terkemuka (AniList, Crunchyroll, MyAnimeList).
 
@@ -25,9 +25,9 @@ Desain antarmuka dibuat secara khusus (*bespoke*) dengan tema biru-putih modern,
 
 ## 🌟 Fitur Utama
 
-### 1. 🗂️ Perpustakaan 1.000 Anime Terverifikasi
+### 1. 🗂️ Perpustakaan 3.000 Anime Terverifikasi
 - **Poster Khas Per Judul & Season**: Setiap anime dan musim penayangan (misal: *Attack on Titan S1–Final*, *Demon Slayer Mugen Train / Entertainment District*, *My Hero Academia S1–S5*) memiliki poster resmi yang 100% berbeda dan akurat.
-- **Paginasi Efisien**: Menampilkan 24 kartu anime per halaman (total 42 halaman) dengan navigasi URL yang rapi (`?page=X&tab=Y`).
+- **Paginasi Efisien**: Menampilkan 24 kartu anime per halaman (total 125 halaman) dengan navigasi URL yang rapi (`?page=X&tab=Y`).
 - **Tab Kategori Pintar**:
   - *Peringkat Teratas* (Top Rated)
   - *Sedang Tayang* (Currently Airing)
@@ -105,10 +105,10 @@ Anime-Library/
 │   └── myanimelist.php                     # Konfigurasi client ID & URL API MAL
 ├── database/
 │   ├── data/
-│   │   └── animes_1000.json                # Dataset 1.000 anime resmi dengan poster unik
+│   │   └── animes_1000.json                # Dataset 3.000 anime resmi dengan poster unik
 │   ├── migrations/                         # Skema database SQLite
 │   └── seeders/
-│       ├── AnimeLibrary1kSeeder.php        # Seeder impor 1.000 anime ke SQLite
+│       ├── AnimeLibrary1kSeeder.php        # Seeder impor 3.000 anime ke SQLite
 │       └── DatabaseSeeder.php              # Akun default admin & user demo
 ├── resources/
 │   └── views/
@@ -157,7 +157,7 @@ touch database/database.sqlite
 # Di Windows PowerShell:
 New-Item -ItemType File -Path database/database.sqlite -Force
 
-# Jalankan migrasi dan muat 1.000 anime + akun demo
+# Jalankan migrasi dan muat 3.000 anime + akun demo
 php artisan migrate:fresh --seed
 ```
 
